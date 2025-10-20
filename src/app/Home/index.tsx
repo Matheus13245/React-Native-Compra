@@ -1,11 +1,15 @@
-import {Text, View, Image } from 'react-native';
+import {Text, View, Image, TouchableOpacity} from 'react-native';
 
+import { Item } from '@/components/Item';
 import {Input} from '@/components/Input'
 import { Button } from "@/components/Button"
 import { Filter } from '@/components/Filter'
-import { FilterStatus } from '@/types/FilterStatus'
- 
+
+ import { FilterStatus } from '@/types/FilterStatus'
 import { styles } from "./styles"
+
+
+const FILTER_STATUS: FilterStatus [] = [FilterStatus.DONE, FilterStatus.PENDING]
 
 export function Home() {
   return (
@@ -15,18 +19,26 @@ export function Home() {
 
       <View style={styles.form}>
 
-        <Input placeholder="Digite seu e-mail"/>
+        <Input placeholder="Oque você deseja comprar?"/>
         <Button tittle='Entrar' activeOpacity={0.8}/>
 
       </View>
 
       <View style={styles.content}>
-
-        <Filter status={FilterStatus.DONE} isActive/>
-        <Filter status={FilterStatus.PENDING} isActive={false}/>
-
+        <View style={styles.header}>
+            {FILTER_STATUS.map((status) => (
+              <Filter key={status} status={status} isActive/>
+            ))}
+            <TouchableOpacity style={styles.clearButton}>
+              <Text style={styles.clearText}>Limpar</Text>
+            </TouchableOpacity>
+        </View>
+        <Item
+         data={{ status: FilterStatus.DONE, description: "Café" }}
+         onStatus={() => console.log("Muda Status")}
+         onRemove={() => console.log("Remover")}
+         />
       </View>
-
     </View>
   );
 }
